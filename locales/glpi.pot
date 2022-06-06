@@ -1,0 +1,70 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Proyectos Development Team
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: GLPI - Proyectos plugin 1.9.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-19 15:53+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: hook.php:356 inc/proyecto_item.class.php:413
+msgid "Associate a Proyectos"
+msgstr ""
+
+#: setup.php:131 inc/proyecto.class.php:43
+msgid "Proyectos"
+msgid_plural "Proyectos"
+msgstr[0] ""
+msgstr[1] ""
+
+#: setup.php:145
+msgid "This plugin requires GLPI >= 0.84"
+msgstr ""
+
+#: inc/profile.class.php:37 inc/profile.class.php:133
+msgid "Rights management"
+msgstr ""
+
+#: inc/proyecto.class.php:154 inc/proyecto.class.php:331
+msgid "Backoffice URL"
+msgstr ""
+
+#: inc/proyecto.class.php:167 inc/proyecto.class.php:310
+#: inc/proyecto.class.php:455
+msgid "Editor"
+msgstr ""
+
+#: inc/proyecto_item.class.php:763
+msgid "Associated Proyectos"
+msgid_plural "Associated Proyectos"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/proyectoservertype.class.php:38
+msgid "Type of treatment server"
+msgid_plural "Types of treatment server"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/proyectotechnic.class.php:38
+msgid "Language of treatment"
+msgid_plural "Languages of treatment"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/proyectotype.class.php:39
+msgid "Category"
+msgid_plural "Categories"
+msgstr[0] ""
+msgstr[1] ""

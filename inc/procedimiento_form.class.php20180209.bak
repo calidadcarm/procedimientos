@@ -1,0 +1,450 @@
+<?php
+/*
+   ----------------------------------------------------------
+   Plugin Procedimientos 2.2.1
+   GLPI 0.85.5
+  
+   Autor: Elena Martínez Ballesta.
+   Fecha: Septiembre 2016
+
+   ----------------------------------------------------------
+ */
+
+if (!defined('GLPI_ROOT')) {
+   die("Sorry. You can't access directly to this file");
+}
+
+class PluginProcedimientosProcedimiento_Form extends CommonDBRelation {
+
+   // From CommonDBRelation
+   static public $itemtype_1 = 'PluginProcedimientosProcedimiento';
+   static public $items_id_1 = 'plugin_procedimientos_procedimientos_id';
+    
+   static public $itemtype_2 = 'PluginFormcreatorForm';
+   static public $items_id_2 = 'plugin_formcreator_forms_id';
+   
+   static $rightname = "plugin_procedimientos";
+   
+   static function cleanForGroup(CommonDBTM $form) {
+      $temp = new self();
+      $temp->deleteByCriteria(
+         array('plugin_formcreator_forms_id' => $form->getField('id'))
+      );
+   }
+   
+   static function cleanForItem(CommonDBTM $item) {
+      $temp = new self();
+	  if ($item->getType()== 'PluginFormcreatorForm'){
+		 $temp->deleteByCriteria(
+				array('plugin_formcreator_forms_id' => $item->getField('id')));
+	  } else if ($item->getType()== 'PluginProcedimientosProcedimiento') {
+		  $temp->deleteByCriteria(
+				array('plugin_procedimientos_procedimientos_id' => $item->getField('id')));
+	  }
+   }
+   
+   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+		if ($item->getType()=='PluginProcedimientosProcedimiento') {
+			if ($_SESSION['glpishow_count_on_tabs']) {
+                  return self::createTabEntry(_n('Pedidos Catalogo', 'Pedidos Catalogo', Session::getPluralNumber()), self::countForProcedimiento($item));
+            }
+            return _n('Pedidos Catalogo','Pedidos Catalogo',2);
+		}
+	}
+
+
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {  
+      if ($item->getType()=='PluginProcedimientosProcedimiento') {        
+        self::showForProcedimiento($item);
+      } 
+      return true;
+   }
+   
+   static function countForProcedimiento(PluginProcedimientosProcedimiento $item) {
+      $restrict = "`glpi_plugin_procedimientos_procedimientos_forms`.`plugin_procedimientos_procedimientos_id` = '".$item->getField('id')."'";
+
+      return countElementsInTable(array('glpi_plugin_procedimientos_procedimientos_forms'), $restrict);
+   }
+
+   function addItem($values) {
+
+      $this->add(array('plugin_procedimientos_procedimientos_id' =>$values["plugin_procedimientos_procedimientos_id"],
+                        'plugin_formcreator_forms_id'=>$values["plugin_formcreator_forms_id"]));
+    
+   }  
+   
+	/**
+	* Muestra los elementos de un procedimientos.
+    **/
+	
+   static function showForProcedimiento(PluginProcedimientosProcedimiento $procedimiento) {
+      global $DB, $CFG_GLPI;
+	  
+      $instID = $procedimiento->fields['id'];
+	
+      if (!$procedimiento->can($instID, READ)) {
+         return false;
+      }
+      $canedit = $procedimiento->can($instID, UPDATE);
+
+      $rand   = mt_rand();
+         echo "<form name='procedimientoform_form$rand' id='procedimientoform_form$rand' method='post'
+               action='".Toolbox::getItemTypeFormURL("PluginProcedimientosProcedimiento_Form")."'>";
+      if ($canedit) {
+         echo "<div class='firstbloc'>";
+
+
+         echo "<table class='tab_cadre_fixe'>";
+         echo "<tr class='tab_bg_2'><th colspan='2'>A&ntilde;adir pedidos de catalogo a los que mostrar procedimientos</th></tr>";
+
+         echo "<tr class='tab_bg_1'><td class='center'>";
+         
+		 PluginFormcreatorForm::dropdown(array('name'      => 'plugin_formcreator_forms_id',
+                               'entity'    => $procedimiento->fields["entities_id"]));		
+         echo "</td><td class='center'>";
+         echo "<input type='submit' name='addform' value=\""._sx('button', 'Add')."\" class='submit'>";
+         echo "<input type='hidden' name='plugin_procedimientos_procedimientos_id' value='$instID'>";
+         echo "</td></tr>";
+         echo "</table>";
+         echo "</div>";
+      }
+
+      echo "<div class='spaced'>";
+      echo "<table class='tab_cadre_fixe'>";
+      echo "<tr>";
+
+      if ($canedit) {
+         echo "<th width='10'>&nbsp;</th>";
+      }
+      echo "<th>Elementos</th>";
+      echo "</tr>";
+
+      $column = "name";
+      $query     = "SELECT `glpi_plugin_formcreator_forms`.*,
+                           `glpi_plugin_procedimientos_procedimientos_forms`.`id` AS IDD, ";
+
+
+      $query .= "`glpi_entities`.`id` AS entity
+                  FROM `glpi_plugin_procedimientos_procedimientos_forms`, `glpi_plugin_formcreator_forms`, `glpi_entities` ";
+      $query .= "WHERE plugin_procedimientos_procedimientos_id=".$instID." and `glpi_plugin_formcreator_forms`.`id` = `glpi_plugin_procedimientos_procedimientos_forms`.`plugin_formcreator_forms_id`
+				 GROUP BY `glpi_plugin_formcreator_forms`.id ORDER BY `glpi_plugin_formcreator_forms`.name";
+      if ($result_linked = $DB->query($query)) {
+               if ($DB->numrows($result_linked)) {
+                  while ($data = $DB->fetch_assoc($result_linked)) {
+                     $linkname = $data["name"];
+                     if ($_SESSION["glpiis_ids_visible"]
+                         || empty($data["name"])) {
+                        $linkname = sprintf(__('%1$s (%2$s)'), $linkname, $data["id"]);
+                     }
+
+                     $link = '../../../plugins/formcreator/front/form.form.php';
+                     $name = "<a href=\"".$link."?id=".$data["id"]."\">".$linkname."</a>";
+
+                     echo "<tr class='tab_bg_1'>";
+
+                     if ($canedit) {
+                        echo "<td width='10' style='padding-top: 0'>";
+                        echo "<button type='submit'  value='".$data["id"]."' name='elimina' style='border:0; background-color: Transparent;' 
+						onclick=\"return confirm('¿Seguro que deseas quitarle a este pedido este procedimientos?');\">
+						<img src='".$_SESSION["glpiroot"]."/plugins/procedimientos/imagenes/error.png' /></button>";
+                        echo "</td>";
+                     }
+                     echo "<td ".
+                           (isset($data['is_deleted']) && $data['is_deleted']?"class='tab_bg_2_2'":"").
+                          ">".$name."</td>";
+                     echo "</tr>";
+                  }
+               }
+      }
+      echo "</table>";
+      if ($canedit) {
+         $paramsma['ontop'] =false;
+         
+      }
+	  Html::closeForm();
+      echo "</div>";
+	  echo "</form>";
+
+   }
+   
+
+   /**
+    * @since version 0.84
+   **/
+   function getForbiddenStandardMassiveAccion() {
+
+      $forbidden   = parent::getForbiddenStandardMassiveAccion();
+      $forbidden[] = 'update';
+      return $forbidden;
+   }
+
+    /**
+    * Export in an array all the data of the current instanciated FORMS
+    * @param boolean $remove_uuid remove the uuid key
+    *
+    * @return array the array with all data (with sub tables)
+    */
+   public function export($remove_uuid = false) {
+      if (!$this->getID()) {
+         return false;
+      }
+
+      $procedimiento_forms = $this->fields;
+      $forms_id=$procedimiento_forms['plugin_formcreator_forms_id'];
+      // remove key and fk
+      unset($procedimiento_forms['id'],
+            $procedimiento_forms['plugin_procedimientos_procedimientos_id']);
+      
+         $procedimiento_form_obj = new PluginFormcreatorForm;
+         if ($procedimiento_form_obj->getFromDB($forms_id)) {
+             
+           $exportacion_form=$procedimiento_form_obj->export($remove_uuid);
+           //$procedimiento_forms["PluginFormcreatorForm"] = $exportacion_form;
+           $procedimiento_forms["uuid"] = $exportacion_form["uuid"];
+       } 
+   
+  return $procedimiento_forms;
+
+  
+         }
+         
+         
+     /**
+    * Process import of json file(s) sended by the submit of self::showImportForm
+    * @param  array  $params GET/POST data who need to contains the filename(s) in _json_file key
+    */
+   public function importJson($params = array()) {
+      // parse json file(s)
+     if (isset($params['_json_file'])){
+      foreach ($params['_json_file'] as $filename) {
+         if (!$json = file_get_contents(GLPI_TMP_DIR."/".$filename)) {
+            Session::addMessageAfterRedirect(__("<STRONG><FONT color='red'>Procedimiento no importable,</FONT> <FONT color='#a42090'>el archivo está vacío</font><FONT color='red'>.</FONT></STRONG>"));
+            continue;
+         }
+         if (!$forms_toimport = json_decode($json, true)) {
+            Session::addMessageAfterRedirect(__("<STRONG><FONT color='red'>Procedimiento no importable,</FONT> <FONT color='#a42090'>el archivo parece corrupto</font><FONT color='red'>.</FONT></STRONG>"));
+            continue;
+         }
+         if (!isset($forms_toimport['procedimiento'])) {
+            Session::addMessageAfterRedirect(__("<STRONG><FONT color='red'>Procedimiento no importable,</FONT> <FONT color='#a42090'>el archivo parece corrupto</font><FONT color='red'>.</FONT></STRONG>"));
+            continue;
+         }
+
+         
+                  foreach ($forms_toimport['procedimiento'] as $importar_procedimiento) {
+         $resultado =  self::import($importar_procedimiento);
+         
+                       if ( $resultado=="ko") {   
+    
+    Session::addMessageAfterRedirect(sprintf(__("<FONT color='red'>El <STRONG>Procedimiento</STRONG>: </font><FONT color='#a42090'><STRONG> %s </STRONG></font><FONT color='red'> ya existe en su <STRONG>GLPI</STRONG>.</font>", "procedimiento"),
+                                                  $importar_procedimiento['name']));   
+                 
+   
+            } else {
+                
+ Session::addMessageAfterRedirect(sprintf(__("<STRONG><FONT color='#0a7c07'>Procedimiento:</font><FONT color='#a42090'><STRONG> %s </STRONG></font><FONT color='#0a7c07'>, importado satisfactoriamente desde: </font><FONT color='#a42090'><STRONG>%s</STRONG></font><FONT color='#0a7c07'>.</font></STRONG>", "procedimiento"),
+                                                  $importar_procedimiento['name'],$filename));      
+                
+            }   
+            
+                  }
+
+
+        
+    
+      
+      
+            }
+     }
+   }
+   
+   /**
+    * Import a procedures into the db
+    * @see PluginProcedimientoForm::importJson
+    *
+    * @param  array   $form the form data (match the form table)
+    * @return integer the form's id
+    */
+   public static function import($procedure = array()) {
+      $procedure_obj = new PluginProcedimientosProcedimiento;
+      $formcreator_obj = new PluginFormcreatorForm;
+      $group_obj  = new PluginProcedimientosProcedimiento_Group; 
+      $documents_obj  = new Document_Item; 
+      
+      $entity   = new Entity;
+
+      $formulario = new self;
+      
+    // retrieve foreign keys
+      if (!isset($procedure['_entity'])
+          || !$procedure['entities_id']
+                  = plugin_porcedimientos_getFromDBByField($entity,
+                                                        'completename',
+                                                        $procedure['_entity'])) {
+         $procedure['entities_id'] = $_SESSION['glpiactive_entity'];
+      }
+      
+      // retrieve procedure by its uuid
+      if ($procedures_id = plugin_porcedimientos_getFromDBByField($procedure_obj,
+                                                          'uuid',
+                                                          $procedure['uuid'])) {
+       
+          //Si existe el procedimiento en nuestro GLPI abortamos importacion                     
+                              
+                                return "ko";
+                 /*     
+         // add id key
+        $procedure['id'] = $procedures_id;
+
+         // update existing procedure
+        $procedure_obj->update($procedure);
+      */
+      
+      } else {
+         
+        // create new procedure
+         $procedures_id = $procedure_obj->add($procedure);
+      
+         
+    //============================== import procedure's itmes ===================================         
+         
+            
+      if ($procedures_id
+          && isset($procedure['_items'])) {
+         foreach ($procedure['_items'] as $item) {
+            PluginProcedimientosProcedimiento_Item::import($procedures_id, $item);
+         }
+      }
+         
+    //============================== import procedure's forms ===================================
+               
+      if ($procedures_id
+          && isset($procedure['_forms'])) {
+                   
+              foreach ($procedure['_forms'] as $form) {
+             $form['plugin_procedimientos_procedimientos_id'] = $procedures_id;
+             
+                  // retrieve procedure by its uuid
+      if ($formcreator_id = plugin_porcedimientos_getFromDBByField($formcreator_obj,
+                                                          'uuid',
+                                                          $form['uuid'])) {
+  
+      $form['plugin_formcreator_forms_id']=$formcreator_id;
+      $formulario->addItem($form);
+      
+      } else {
+         
+           Session::addMessageAfterRedirect(sprintf(__("<STRONG><FONT color='red'>Plugin FormCreator no encontrado uuid:</font><br><FONT color='#a42090'> %s </font><br>", "procedimiento"),
+                                                  $form['uuid']));  
+      }
+                          
+         }    
+         
+      }      
+      
+    //============================== import procedure's groups ===================================   
+               
+      if ($procedures_id
+          && isset($procedure['_groups'])) {
+                   
+              foreach ($procedure['_groups'] as $group) {
+             $group['plugin_procedimientos_procedimientos_id'] = $procedures_id;
+             
+       $group_obj->add($group);
+      
+      }             
+             
+         }   
+  
+
+    //============================== import procedure's documents ===================================   
+               
+      if ($procedures_id
+          && isset($procedure['_documents_items'])) {
+                   
+              foreach ($procedure['_documents_items'] as $documents) {
+          
+                  if ($documents_id = plugin_porcedimientos_getFromDBByField($documents_obj,
+                                                          'documents_id',
+                                                          $documents['documents_id'])) {    
+       $documents['items_id'] = $procedures_id;             
+       $documents_obj->add($documents);
+     
+             }   else {
+         
+           Session::addMessageAfterRedirect(sprintf(__("<STRONG><FONT color='red'>Documento no encontrado con ID:</font><FONT color='#a42090'> %s </font><br>", "procedimiento"),
+                                                  $documents['documents_id']));  
+      } 
+       
+      }             
+             
+         }         
+     
+         
+          return $procedures_id;
+      
+      
+         }
+ 
+      
+   
+
+
+ /*   // Save all question conditions stored in memory
+      PluginFormcreatorQuestion_Condition::import(0, array(), false);
+
+      // import form's validators
+      if ($procedures_id
+          && isset($procedure['_validators'])) {
+         foreach ($procedure['_validators'] as $validator) {
+            PluginFormcreatorForm_Validator::import($procedures_id, $validator);
+         }
+      }
+
+      // import form's targets
+      if ($procedures_id
+          && isset($procedure['_targets'])) {
+         foreach ($procedure['_targets'] as $target) {
+            PluginFormcreatorTarget::import($procedures_id, $target);
+         }
+      }*/
+
+  
+
+   }  
+   
+  /**
+    * Display an html form to upload a json with forms data
+    */
+   public function showImportForm() {
+      global $CFG_GLPI;
+
+      echo "<form name='form' method='post' action='".
+            PluginProcedimientosProcedimiento_Form::getFormURL().
+            "?import_send=1' enctype=\"multipart/form-data\">";
+
+      echo "<div class='spaced' id='tabsbody'>";
+      echo "<table class='tab_cadre_fixe' id='mainformtable'>";
+      echo "<tr class='headerRow'>";
+      echo "<th>";
+      echo __("Importar Procedimientos");
+      echo "</th>";
+      echo "</tr>";
+      echo "<tr>";
+      echo "<td>";
+      echo Html::file(array('name' => 'json_file'));
+      echo "</td>";
+      echo "</tr>";
+      echo "<td class='center'>";
+      echo Html::submit(_x('button', 'Send'), array('name' => 'import_send'));
+      echo "</td>";
+      echo "</tr>";
+      echo "<tr>";
+      echo "</table>";
+      echo "</div>";
+
+      Html::closeForm();
+   }     
+
+}
+?>

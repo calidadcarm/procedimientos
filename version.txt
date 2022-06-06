@@ -1,0 +1,36 @@
+Versión 2.2.1 - 23-02-2017
+----------------------------
+Cambios para solucionar que cuando se le asocia a un ticket creado, una petición de catálogo, le asocia bien el procedimiento y lo inicia, pero crea la primera tarea dos veces.
+
+Versión 2.2.1 - 27-03-2017
+----------------------------
+Modificado fichero hook.php para que al comprobar tickets recurrentes coja la entidad del ticket y no la entidad activa.
+
+Versión 2.2.1 - 06-06-2017
+----------------------------
+Modificado fichero procedimiento_ticket.class.php para que si el procedimiento está desactivado no aparezca 
+como valor por defecto en el desplegable de procedimientos disponibles al técnico (ticket 365888)
+Modificado el fichero hook.php para cambiar los rótulos de los desplegables (ticket 333903)
+
+Versión 2.2.1 - 25-07-2017
+----------------------------
+Modificado fichero function.procedimientos.php para corregir bugs detectados.
+ticket 385397
+ticket 392524
+ticket 393430
+ticket 392407
+
+Versión 2.2.1 - 26-09-2017
+----------------------------
+Modificado fichero function.procedimientos.php para corregir bugs detectados.
+Ticket - Fallo en procedimientos - ID 407950 (y tickets relacionados)
+
+Versión 3.0.0 - 27-09-2017
+-------------------------------------
+Adaptación a la versión de GLPI 9.1.x
+Compatible con formcreator 2.5+ v1 (Oscar)
+
+Versión 3.2.1 - 16-04-2018
+-------------------------------------
+Nuevos campos en la definición de tareas de procedimiento.
+

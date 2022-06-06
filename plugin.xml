@@ -1,0 +1,200 @@
+<root>
+   <name>Procedimientos</name>
+   <key>procedimientos</key>
+   <state>stable</state>
+   <logo>https://raw.githubusercontent.com/calidadcarm/procedimientos/main/imagenes/logo.png</logo>
+   <description>
+      <short>
+         <es>El plugin procedimientos le permite asociar a un ticket los pasos que debe seguir el técnico para resolver correctamente el ticket.</es>
+         <en>The procedures plugin allows you to associate to a ticket the steps that the technician must follow to correctly resolve the ticket</en>
+         <fr>Le plugin de procédures permet d'associer à un ticket les étapes que le technicien doit suivre pour résoudre correctement le ticket.</fr>
+      </short>
+      <long>
+         <es>
+El plugin procedimientos le permite asociar a un ticket los pasos que debe seguir el técnico para resolver correctamente el ticket. 
+
+Esta guía de pasos creará tareas y seguimientos de manera automática a medida que se vayan completando tareas y contestando condiciones.         
+
+Un procedimiento se puede asociar a pedidos de catálogo del plugin Formcreator y Tickets recurrentes de tal manera que el procedimiento se ejecuta automáticamente al crear el ticket.
+
+También existe la manera de ejecutar un procedimiento de manera manual en un ticket ya existente.
+
+-----------------------------------------
+
+Dentro de un procedimiento puedes crear diferentes elementos:
+
+Acciones: 
+
+   1) Eliminar todos los técnicos del ticket.
+   2) Escalar un ticket a otro grupo.
+   3) Modificar los siguientes elementos de un ticket:
+
+      :: Estado.
+      :: Origen de la solicitud.
+      :: Categoría.
+      :: Tipo de ticket.
+      :: ANS resolución.
+      :: Plantilla de solución.
+
+   4) Seguimiento, crea un seguimiento en el ticket.
+   5) Tarea, crea una tarea en el ticket y detiene el flujo del procedimiento hasta que no esté completada.
+   6) Validación, crea una validación personalizada al usuario o grupo que deseemos.
+
+Condiciones: 
+
+   Este elemento nos permitirá movernos por los diferentes pasos del procedimiento según conteste el técnico.
+ 
+Enlaces:
+
+   Si el técnico necesitara hacer por ejemplo una gestión en un portal podríamos poner el enlace.
+   
+Marcadores:  
+
+   (Inicio y Fin del procedimiento)
+
+Procedimiento: 
+   
+   Anidar un procedimiento con otro.
+
+Salto: 
+   
+   Este elemento nos permite saltar de línea en un procedimiento. 
+         </es>
+         <en>
+The procedures plugin allows you to associate the steps that the technician must follow to correctly resolve the ticket to a ticket.
+
+This step guide will automatically create tasks and follow-ups as you complete tasks and answer conditions.
+
+A procedure can be associated to Formcreator plugin catalog orders and Recurring Tickets in such a way that the procedure is automatically executed when the ticket is created.
+
+There is also a way to manually execute a procedure on an existing ticket.
+
+-----------------------------------------
+
+Within a procedure you can create different elements:
+
+Actions:
+
+   1) Remove all technicians from the ticket.
+   2) Escalate a ticket to another group.
+   3) Modify the following elements of a ticket:
+
+      :: Condition.
+      :: Origin of the request.
+      :: Category.
+      :: Ticket type.
+      :: ANS resolution.
+      :: Solution template.
+
+   4) Follow-up, create a follow-up on the ticket.
+   5) Task, creates a task on the ticket and stops the flow of the procedure until it is completed.
+   6) Validation, create a custom validation for the user or group that we want.
+
+Conditions:
+
+   This element will allow us to move through the different steps of the procedure as the technician answers.
+ 
+Links:
+
+   If the technician needed to do, for example, a management in a portal, we could put the link.
+   
+Markers:
+
+   (Start and End of the procedure)
+
+Process:
+   
+   Nest one procedure within another.
+
+Jump:
+   
+   This element allows us to jump lines in a procedure.
+         </en>
+         <fr>
+Le plugin de procédures permet d'associer les étapes que le technicien doit suivre pour résoudre correctement le ticket à un ticket.
+
+Ce guide étape créera automatiquement des tâches et des suivis au fur et à mesure que vous terminez des tâches et répondez à des conditions.
+
+Une procédure peut être associée aux commandes du catalogue du plugin Formcreator et aux Tickets Récurrents de manière à ce que la procédure soit automatiquement exécutée lors de la création du ticket.
+
+Il existe également un moyen d'exécuter manuellement une procédure sur un ticket existant.
+
+-----------------------------------------
+
+Au sein d'une procédure, vous pouvez créer différents éléments :
+
+Actions:
+
+   1) Supprimez tous les techniciens du ticket.
+   2) Transférer un ticket à un autre groupe.
+   3) Modifier les éléments suivants d'un ticket :
+
+      :: Condition.
+      :: Origine de la demande.
+      :: Catégorie.
+      :: Type de billet.
+      :: Résolution ANS.
+      :: Modèle de solution.
+
+   4) Suivi, créer un suivi sur le ticket.
+   5) Tâche, crée une tâche sur le ticket et arrête le flux de la procédure jusqu'à ce qu'elle soit terminée.
+   6) Validation, créez une validation personnalisée pour l'utilisateur ou le groupe que nous voulons.
+
+Les conditions:
+
+   Cet élément nous permettra de parcourir les différentes étapes de la procédure au fur et à mesure que le technicien répondra.
+ 
+Liens:
+
+   Si le technicien avait besoin de faire, par exemple, une gestion dans un portail, on pourrait mettre le lien.
+   
+Marqueurs:
+
+   (Début et Fin de la procédure)
+
+Traiter:
+   
+   Imbriquer une procédure dans une autre.
+
+Saut:
+   
+   Cet élément nous permet de sauter des lignes dans une procédure.
+         </fr>
+      </long>
+   </description>
+   <homepage>https://github.com/calidadcarm/procedimientos/</homepage>
+   <download>https://github.com/calidadcarm/procedimientos/releases/</download>
+   <issues>https://github.com/calidadcarm/procedimientos/issues</issues>
+   <readme>https://github.com/calidadcarm/procedimientos/blob/main/README.md</readme>
+   <authors>
+      <author>CARM</author>
+   </authors>
+   <versions>
+      <version>
+         <num>4.1.4</num>
+         <compatibility>~9.4.6</compatibility>
+         <download_url>https://github.com/calidadcarm/procedimientos/releases/tag/procedimientos_4.1.4</download_url>
+      </version>
+   </versions>
+   <langs>
+      <lang>es_ES</lang>
+   </langs>
+   <license>AGPL3</license>
+   <tags>
+      <es>
+         <tag>procedimientos</tag>
+         <tag>procedimiento</tag>         
+      </es>
+      <en>
+         <tag>procedures</tag>
+         <tag>process</tag>
+      </en>
+      <fr>
+         <tag>procédures</tag>
+         <tag>traiter</tag>
+      </fr>
+   </tags>
+   <screenshots>
+      <screenshot>https://raw.githubusercontent.com/calidadcarm/procedimientos/main/imagenes/screenshot.png</screenshot>
+   </screenshots>
+</root>
