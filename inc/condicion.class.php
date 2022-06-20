@@ -221,7 +221,7 @@ function lineas($post){
 		
 	$result=$DB->query($query);	
 	
-	$lineas = $DB->fetch_assoc($result);	
+	$lineas = $DB->fetchassoc($result);	
 	
 	$comment="<div class=\'condiciones\'>";
 	
@@ -368,7 +368,7 @@ function lineas($post){
 
          if ($DB->numrows($result) > 0) {
             $ok = true;
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchassoc($result)) {
   
      $item = new PluginProcedimientosCondicion;
 

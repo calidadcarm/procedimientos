@@ -11,6 +11,32 @@
  */
 include_once (GLPI_ROOT . "/plugins/procedimientos/inc/function.procedimientos.php");
 
+// [INICIO] [CRI] JMZ18G MIGRACIÓN GLPI 9.5.7 - 1 columnas utilizan el tipo de campo de fecha y hora en desuso.
+function procedimientos_notMigratedDatetime() {
+	global $DB;
+
+	$result = $DB->request([
+		//	'COUNT'       => 'cpt',
+			'FROM'        => 'information_schema.columns',
+			'WHERE'       => [
+				 'information_schema.columns.table_schema' => $DB->dbdefault,
+				 'information_schema.columns.table_name'   => ['LIKE', 'glpi\_plugin\_procedimientos\_%'],
+				 'information_schema.columns.data_type'    => ['datetime']
+			]
+	]);
+
+	while ($data = $result->next()) { 
+
+		// Convert datetime to timestamp
+		$query = "ALTER TABLE `".$data["TABLE_NAME"]."` MODIFY `".$data["COLUMN_NAME"]."` TIMESTAMP DEFAULT CURRENT_TIMESTAMP;";
+	//	echo $query;
+		$DB->query($query);
+			
+	}
+
+}
+// [FINAL] [CRI] JMZ18G MIGRACIÓN GLPI 9.5.7 - 1 columnas utilizan el tipo de campo de fecha y hora en desuso.
+
 // Install process for plugin : need to return true if succeeded
 function plugin_procedimientos_install() {
    global $DB;
@@ -121,6 +147,18 @@ if ($result = $DB->query($query)) {
   // *******************************************************************************************
   //  [FINAL] [CRI] JMZ18G ASOCIAR AL PLUGIN EL DESTINO DEL TICKET DE FORMCREATOR 
   // *******************************************************************************************
+
+	// [INICIO] [CRI] JMZ18G MIGRACIÓN GLPI 9.5.7 - 1 columnas utilizan el tipo de campo de fecha y hora en desuso.
+	if ($DB->TableExists("glpi_plugin_procedimientos_procedimientos")){
+
+		if ($DB->areTimezonesAvailable()) {
+
+			procedimientos_notMigratedDatetime();
+
+	 	}
+
+	}
+	// [FINAL] [CRI] JMZ18G MIGRACIÓN GLPI 9.5.7 - 1 columnas utilizan el tipo de campo de fecha y hora en desuso.
 
    PluginProcedimientosProfile::initProfile();
    PluginProcedimientosProfile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);	
@@ -475,8 +513,11 @@ function plugin_procedimientos_update_Validation($item) {
 			$select = "SELECT id from `glpi_plugin_procedimientos_procedimientos_tickets`
 					   WHERE tickets_id=".$tickets_id." and itemtype='PluginProcedimientosAccion' and instancia_id=".$id." and state=2;";					   
 			$result_select = $DB->query($select);
-            Toolbox::logInFile("procedimientos", "Select: ".$select. "\n");			
-            $row = $DB->fetch_array($result_select);
+            Toolbox::logInFile("procedimientos", "Select: ".$select. "\n");	
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+          //$row = $DB->fetch_array($result_select);
+						$row = $DB->fetchAssoc($result_select);
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function						
 			if (isset($row['id'])){
 				$update = "UPDATE `glpi_plugin_procedimientos_procedimientos_tickets` SET `state`=1 
 					   WHERE id=".$row['id'].";";
@@ -640,8 +681,12 @@ function plugin_procedimientos_update_TicketTask($item) {
 			$select = "SELECT id from `glpi_plugin_procedimientos_procedimientos_tickets`
 					   WHERE tickets_id=".$tickets_id." and itemtype='PluginProcedimientosAccion' and instancia_id=".$id." and state=2;";					   
 			$result_select = $DB->query($select);
-            Toolbox::logInFile("procedimientos", "Select: ".$select. "\n");			
-            $row = $DB->fetch_array($result_select);
+            Toolbox::logInFile("procedimientos", "Select: ".$select. "\n");			            
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+						//$row = $DB->fetch_array($result_select);
+						$row = $DB->fetchAssoc($result_select);
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function								
+
 			if (isset($row['id'])){
 				$update = "UPDATE `glpi_plugin_procedimientos_procedimientos_tickets` SET `state`=1 
 					   WHERE id=".$row['id'].";";
@@ -732,7 +777,10 @@ function plugin_procedimientos_add_Ticket($item) {
 					exit();*/
 					
 		/*		$result = $DB->query($query);
-				$row = $DB->fetch_array($result);		
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+          //$row = $DB->fetch_array($result);
+						$row = $DB->fetchAssoc($result);
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function			
 				if (isset($row['plugin_procedimientos_procedimientos_id'])){
 					$procedimientos_id = $row['plugin_procedimientos_procedimientos_id'];
 					// Borramos de los elementos de posibles anteriores procedimientos asociados al ticket correspondiente
@@ -771,7 +819,10 @@ function plugin_procedimientos_add_Ticket($item) {
 			
 			$result = $DB->query($query);
 			
-			$row = $DB->fetch_array($result);
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+          //$row = $DB->fetch_array($result);
+						$row = $DB->fetchAssoc($result);
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
 
 			if (isset($row['plugin_procedimientos_procedimientos_id'])){
 					$procedimientos_id = $row['plugin_procedimientos_procedimientos_id'];
@@ -866,7 +917,10 @@ function plugin_procedimientos_add_Ticket($item) {
 			if ($num_row_tt > 0){
 				$encontrado = FALSE;
 				$name_ticket = $item->getField('name');
-				while (($row_tt = $DB->fetch_array($result_tt))&& ($encontrado == FALSE)) {
+			// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+			//while (($row_tt = $DB->fetch_array($result_tt))&& ($encontrado == FALSE)) {
+				while (($row_tt = $DB->fetchAssoc($result_tt))&& ($encontrado == FALSE)) {
+			// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
 					//Tratamos el campo value para modificar los parametros dd, mm, aaaa con los datos del ticket
 					$date_ticket = $item->getField('date');
 					$date = strtotime($date_ticket);
@@ -894,7 +948,10 @@ function plugin_procedimientos_add_Ticket($item) {
 							glpi_plugin_procedimientos_procedimientos.active=1;";
 							
 							$result2 = $DB->query($query2);
-							$row2 = $DB->fetch_array($result2);
+						// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+						//$row2 = $DB->fetch_array($result2);
+							$row2 = $DB->fetchAssoc($result2);
+						// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
 							if (isset($row2["plugin_procedimientos_procedimientos_id"])){
 								$procedimientos_id = $row2["plugin_procedimientos_procedimientos_id"];
 								// Borramos de los elementos de posibles anteriores procedimientos asociados al ticket correspondiente
@@ -953,7 +1010,10 @@ if ((isset($_POST["actualizarPedido"]))
 					$num_rows = $DB->numrows($result_proc);
 	
 					if ($num_rows > 0){	
-						$proc_actual = $DB->fetch_array($result_proc);
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function		
+					//$proc_actual = $DB->fetch_array($result_proc);
+						$proc_actual = $DB->fetchAssoc($result_proc);
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
 						$proc_actual_ID = $proc_actual['plugin_procedimientos_procedimientos_id'];
 						
 						if ($procedimientos_id != $proc_actual_ID){
@@ -1006,7 +1066,10 @@ if ((isset($_POST["actualizarPedido"]))
 						and `glpi_plugin_procedimientos_procedimientos`.`is_deleted`=0  and `glpi_plugin_formcreator_forms_items`.`items_id`='".$tickets_id."';";
 	
 					$result = $DB->query($query);
-					$row = $DB->fetch_array($result);		
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+          //$row = $DB->fetch_array($result);
+						$row = $DB->fetchAssoc($result);
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function			
 					if (isset($row['id_proc'])){
 						$procedimientos_id = $row['id_proc'];
 						
@@ -1018,7 +1081,10 @@ if ((isset($_POST["actualizarPedido"]))
 						$num_rows = $DB->numrows($result_proc);
 		
 						if ($num_rows > 0){	
-							$proc_actual = $DB->fetch_array($result_proc);
+					 // [INICIO] [CRI] [JMZ18G] fetch_array deprecated function
+					 // $proc_actual = $DB->fetch_array($result_proc);
+							$proc_actual = $DB->fetchAssoc($result_proc);
+					 // [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
 							$proc_actual_ID = $proc_actual['plugin_procedimientos_procedimientos_id'];
 							
 							if ($procedimientos_id != $proc_actual_ID){

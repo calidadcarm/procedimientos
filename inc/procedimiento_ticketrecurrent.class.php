@@ -133,7 +133,7 @@ class PluginProcedimientosProcedimiento_TicketRecurrent extends CommonDBRelation
 				 GROUP BY `glpi_ticketrecurrents`.id ORDER BY `glpi_ticketrecurrents`.name";
       if ($result_linked = $DB->query($query)) {
                if ($DB->numrows($result_linked)) {
-                  while ($data = $DB->fetch_assoc($result_linked)) {
+                  while ($data = $DB->fetchassoc($result_linked)) {
                      $linkname = $data["name"];
                      if ($_SESSION["glpiis_ids_visible"]
                          || empty($data["name"])) {

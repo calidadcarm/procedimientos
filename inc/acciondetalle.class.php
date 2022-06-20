@@ -120,7 +120,10 @@ $select= "SELECT * from `glpi_plugin_procedimientos_tareas` where `plugin_proced
 						 
 						// echo $select;
 				$result = $DB->query($select);
-				$row = $DB->fetch_array($result);
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+          //$row = $DB->fetch_array($result);
+						$row = $DB->fetchAssoc($result);
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
 				$taskcategories_id = $row['taskcategories_id'];			
 
 				// Plantilla de tarea.
@@ -325,7 +328,7 @@ $rand=Document::dropdown(array('entity' => $entities_id , 'used'   => $used));
 				echo "<td colspan='10'>";
 				echo "<table border='0' width='100%'>";
 	   
-      while ($data = $DB->fetch_assoc($result)) {
+      while ($data = $DB->fetchassoc($result)) {
          $document_id = $data['id'];
          $categoria = $data['categoria'];
 		 $documento = $data['documento'];
@@ -457,7 +460,10 @@ $.post('". $CFG_GLPI["root_doc"]."/plugins/procedimientos/ajax/documentos.php', 
 				$select= "SELECT * from `glpi_plugin_procedimientos_escalados` where
 						 `plugin_procedimientos_accions_id`= $instID";
 				$result = $DB->query($select);
-				$row = $DB->fetch_array($result);
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+          //$row = $DB->fetch_array($result_select);
+						$row = $DB->fetchAssoc($result);
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
 				$groups_id_asignado = $row['groups_id_asignado'];		            
 				$groups_id_observ = $row['groups_id_observ'];
 				$suppliers_id = $row['suppliers_id'];
@@ -546,7 +552,10 @@ $.post('". $CFG_GLPI["root_doc"]."/plugins/procedimientos/ajax/documentos.php', 
 				$select= "SELECT * from `glpi_plugin_procedimientos_updatetickets` where
 						 `plugin_procedimientos_accions_id`= $instID";
 				$result = $DB->query($select);
-				$row = $DB->fetch_array($result);
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+          //$row = $DB->fetch_array($result);
+						$row = $DB->fetchAssoc($result);
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
 				$requesttypes_id = $row['requesttypes_id'];	
 				$status = $row['status'];	
 				$itilcategories_id = $row['itilcategories_id'];
@@ -655,7 +664,10 @@ $.post('". $CFG_GLPI["root_doc"]."/plugins/procedimientos/ajax/documentos.php', 
 						$select= "SELECT * from `glpi_plugin_procedimientos_seguimientos` where `plugin_procedimientos_accions_id`= $instID";						 
 						 
 				$result = $DB->query($select);
-				$row = $DB->fetch_array($result);
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+          //$row = $DB->fetch_array($result);
+						$row = $DB->fetchAssoc($result);
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
 				$content = $row['content'];
 				if (!isset($row["is_private"])){
 					$row["is_private"] = 1;
@@ -749,7 +761,7 @@ $.post('". $CFG_GLPI["root_doc"]."/plugins/procedimientos/ajax/documentos.php', 
 				echo "<td colspan='10'>";
 				echo "<table border='0' width='100%'>";
 	   
-      while ($data = $DB->fetch_assoc($result)) {
+      while ($data = $DB->fetchassoc($result)) {
          $document_id = $data['id'];
          $categoria = $data['categoria'];
 		 $documento = $data['documento'];

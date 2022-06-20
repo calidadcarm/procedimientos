@@ -32,6 +32,10 @@ class PluginProcedimientosProcedimiento extends CommonDBTM {
       return __('Procedimiento', 'Procedimiento');
    }
 
+   static function getIcon() {
+		return "fas fa-cubes";
+	}
+
     // Si borro un procedimiento
    function cleanDBonPurge() {
 	   
@@ -110,7 +114,7 @@ class PluginProcedimientosProcedimiento extends CommonDBTM {
 				where `items_id`=".$item->getField('id')." and `itemtype`='".$item->getType()."') as procedimientos;";				
 				
 	  $result = $DB->query($query);
-	  $data = $DB->fetch_assoc($result);
+	  $data = $DB->fetchassoc($result);
 	  return ($data['num_proc']);
 	
    }   
@@ -181,7 +185,7 @@ class PluginProcedimientosProcedimiento extends CommonDBTM {
 				 
       if ($result_linked = $DB->query($query)) {
                if ($DB->numrows($result_linked)) {
-                  while ($data = $DB->fetch_assoc($result_linked)) {
+                  while ($data = $DB->fetchassoc($result_linked)) {
                      $linkname = $data["name"];
                      if ($_SESSION["glpiis_ids_visible"]
                          || empty($data["name"])) {

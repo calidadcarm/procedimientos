@@ -142,7 +142,7 @@ function plugin_init_procedimientos() {
 function plugin_version_procedimientos() {
 
    return array('name'          => _n('Procedimientos' , 'Procedimientos' ,2, 'Procedimientos'),
-                'version'        => '4.1.4',  //  [CRI] JMZ18G [CRI] - 06/05/2022 Añadir accion Eliminar Técnicos A LA 4.1.4
+                'version'        => '4.2.0',  //  [CRI] JMZ18G [CRI] - 06/05/2022 Añadir accion Eliminar Técnicos A LA 4.1.4
                 'license'        => 'AGPL3',
                 'author'         => '<a href="http://www.carm.es">CARM</a>',
                 'homepage'       => 'http://www.carm.es',
@@ -368,6 +368,10 @@ function aviso_grupo($item) {
 
 global $CFG_GLPI;
 
+if (((isset($item->input["users_id_tech"])) or (isset($item->fields["users_id_tech"])))
+   and 
+   ((isset($item->input["groups_id_tech"])) or (isset($item->fields["groups_id_tech"])))) {
+
 $user_task = ((isset($item->input["users_id_tech"])) ? $item->input["users_id_tech"] : $item->fields["users_id_tech"] );   
 
 $group_task = ((isset($item->input["groups_id_tech"])) ? $item->input["groups_id_tech"] : $item->fields["groups_id_tech"] );
@@ -418,6 +422,8 @@ if (($group_task>0) and ($user_task>0)) {
    Session::addMessageAfterRedirect(__($tabla, 'procedimientos'),true, WARNING, false);						
       
    }
+
+}
 
 }
 

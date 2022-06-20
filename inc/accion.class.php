@@ -70,6 +70,10 @@ class PluginProcedimientosAccion extends CommonDBTM {
 		return _n('Acciones','Acciones',$nb, 'accions');
    }    
    
+   static function getIcon() {
+		return "fas fa-check-double";
+	 }
+
    // Si borro una acción
    function cleanDBonPurge() {
 	   global $DB;
@@ -495,7 +499,7 @@ $item=self::consulta($query,"_seguimientos", $item);
                   
       if ($result = $DB->query($query)) {
          if ($DB->numrows($result)) {      
-            while ($line = $DB->fetch_assoc($result)) {           
+            while ($line = $DB->fetchassoc($result)) {           
                unset($line["id"],
                      //$line["plugin_procedimientos_accions_id"],
                      $line["plugin_procedimientos_accions_id"]);
@@ -508,7 +512,7 @@ $item=self::consulta($query,"_seguimientos", $item);
 
 						  if ($result2 = $DB->query($query_documents)) {
 						          if ($DB->numrows($result2)) {      
-            while ($documents = $DB->fetch_assoc($result2)) {
+            while ($documents = $DB->fetchassoc($result2)) {
 			
 			$line["_documents"][]=$documents; 
 			
