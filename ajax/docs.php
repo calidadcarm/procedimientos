@@ -70,7 +70,7 @@ if (isset($_POST['procedimientos_id']) && !empty($_POST['procedimientos_id'])) {
 				   if ($DB->numrows($result_linked1)) {
 
 					 $document = new Document();
-					 while ($data = $DB->fetch_assoc($result_linked1)) {
+					 while ($data = $DB->fetchassoc($result_linked1)) {
 						 $item->getFromDB($data["id"]);
 						 Session::addToNavigateListItems($type,$data["id"]);
 						 $ID = "";

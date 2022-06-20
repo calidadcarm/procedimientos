@@ -122,7 +122,7 @@ function lineas($post){
 		
 	$result=$DB->query($query);	
 	
-	$lineas = $DB->fetch_assoc($result);	
+	$lineas = $DB->fetchassoc($result);	
 	
 	$comment="<div class=\'condiciones\'>";
 	if ((isset($lineas["goto_id"])) and ($lineas["goto_id"]>0)){ $comment=$comment."Ir a #linea: <strong><span id=\'linea_".$post['goto_id']."\'>".$lineas['goto_id']."</span></strong><BR>";  }	

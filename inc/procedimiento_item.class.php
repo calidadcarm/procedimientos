@@ -139,7 +139,7 @@ class PluginProcedimientosProcedimiento_Item extends CommonDBRelation{
 
          if ($DB->numrows($result) > 0) {
             $ok = true;
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchassoc($result)) {
                if ($this->can($data["id"],UPDATE)) {
                   $ok &= $this->delete($data);
                }

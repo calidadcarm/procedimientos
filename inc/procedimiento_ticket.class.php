@@ -109,7 +109,7 @@ class PluginProcedimientosProcedimiento_Ticket extends CommonDBRelation {
 						and glpi_plugin_formcreator_forms_items.items_id=".$instID." order by glpi_plugin_procedimientos_procedimientos_forms.id ASC";
 					//echo "<br>Query pedidos:".$query."<br>";
 					$result = $DB->query($query);
-					if ($row = $DB->fetch_assoc($result)) {
+					if ($row = $DB->fetchassoc($result)) {
 						if (isset($row['id'])){
 							$params["toadd"]= array($row["id"] => $row["nombre"]);
 							$params["value"]= $row["id"];
@@ -133,7 +133,7 @@ class PluginProcedimientosProcedimiento_Ticket extends CommonDBRelation {
 					and glpi_tickets.id=".$instID;
 					//echo "<br>Query t.recurrente:".$query."<br>";
 					$result = $DB->query($query);
-					if ($row = $DB->fetch_assoc($result)) {
+					if ($row = $DB->fetchassoc($result)) {
 						$params["toadd"]= array($row["procedimientos_id"] => $row["name"]);
 						$params["value"]= $row["procedimientos_id"];
 						$procedimientos_id = $row["procedimientos_id"];					
@@ -246,7 +246,7 @@ class PluginProcedimientosProcedimiento_Ticket extends CommonDBRelation {
 				   if ($DB->numrows($result_linked1)) {
 
 					 $document = new Document();
-					 while ($data = $DB->fetch_assoc($result_linked1)) {
+					 while ($data = $DB->fetchassoc($result_linked1)) {
 						 $item->getFromDB($data["id"]);
 						 Session::addToNavigateListItems($type,$data["id"]);
 						 $ID = "";
@@ -329,7 +329,12 @@ class PluginProcedimientosProcedimiento_Ticket extends CommonDBRelation {
 			
 			if ($nb>0){
 				$p_anidado = NULL;
-				while ($row = $DB->fetch_array($result)) {
+
+			// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+			//while ($row = $DB->fetch_array($result)) {
+				while ($row = $DB->fetchAssoc($result)) {																																																																						
+			// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function		
+
 					// Para distinguir procedimientos (activos y no activos/borrados)
 					if ((isset($p_anidado))&&($p_anidado == $row['plugin_procedimientos_procedimientos_id'])){
 						$item_anidado = 1;
@@ -373,7 +378,11 @@ class PluginProcedimientosProcedimiento_Ticket extends CommonDBRelation {
 					$item_details =$item_details." FROM `$itemtable` where id=".$row['items_id'].";";
 					
 					$result_details = $DB->query($item_details);
-					$details = $DB->fetch_array($result_details);
+
+			// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+			 // $details = $DB->fetch_array($result_details);
+				  $details = $DB->fetchAssoc($result_details);
+			// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function						
 	
 					$name = $details["name"];
 					if ($row['itemtype'] == 'PluginProcedimientosProcedimiento'){
@@ -481,7 +490,7 @@ class PluginProcedimientosProcedimiento_Ticket extends CommonDBRelation {
 										   FROM glpi_plugin_procedimientos_accions
 									       where id=".$row["items_id"].";";
 							$tipo_result = $DB->query($tipo_query);
-							if ($tipo_row = $DB->fetch_assoc($tipo_result)) {
+							if ($tipo_row = $DB->fetchassoc($tipo_result)) {
 								if ($tipo_row['plugin_procedimientos_tipoaccions_id']== 3){									
 									if ($row["state"] == 2){
 										echo "<input type='hidden' name='items_id' value='".$row["items_id"]."'>";

@@ -22,7 +22,7 @@
 	
 	if($result = $DB->query($array_1)){
 					
-    while ($data = $DB->fetch_assoc($result)) {
+    while ($data = $DB->fetchassoc($result)) {
 
     array_push($condition, $data["id"]);
 
@@ -45,7 +45,7 @@
 	
 	$result = $DB->query($array_2);
 	
-    while ($data = $DB->fetch_assoc($result)) {
+    while ($data = $DB->fetchassoc($result)) {
 
     array_push($condition, $data["id"]);
 
@@ -140,8 +140,11 @@ function plugin_procedimientos_checkForms () {
 	//echo $query;
 	//exit();
 	$result = $DB->query($query);
-	$row = $DB->fetch_array($result);
-	$estado= $row[0];
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+          //$row = $DB->fetch_array($result);
+						$row = $DB->fetchAssoc($result);
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
+	$estado= $row["state"];
 	if ((isset($estado))&&($estado == 1)){
 		return true;
 	} else {
@@ -182,7 +185,10 @@ function getLineasProcedimiento($procedimientos_id) {
 	$num_rows = $DB->numrows($result);
 	
 	if ($num_rows > 0){
-		while ($row = $DB->fetch_array($result)) {
+	// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+	//while ($row = $DB->fetch_array($result)) {
+		while ($row = $DB->fetchAssoc($result)) {
+	// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function		
 			array_push($lineas,$row['line']); 
 		}
 	} else {
@@ -204,7 +210,11 @@ function getLineasProcedimiento_id($procedimientos_id) {
 	$num_rows = $DB->numrows($result);
 	
 	if ($num_rows > 0){
-		while ($row = $DB->fetch_array($result)) {
+
+	// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+	//while ($row = $DB->fetch_array($result)) {
+		while ($row = $DB->fetchAssoc($result)) {		
+	// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function				
 			$lineas[$row['id']]=$row['line']; 
 		}
 	} else {
@@ -248,7 +258,7 @@ function getItemsForProcedimiento($procedimientos_id, $entities_id) {
         $result_linked = $DB->query($query);
         $nb            = $DB->numrows($result_linked);
 
-         while ($objdata = $DB->fetch_assoc($result_linked)) {
+         while ($objdata = $DB->fetchassoc($result_linked)) {
 		   $items[$objdata['linea']][$itemtype] = $objdata;
         }
      }
@@ -380,7 +390,7 @@ function instancia_procedimiento($procedimientos_id, $tickets_id){
 				  where plugin_procedimientos_procedimientos_id=".$procedimientos_id." order by `line`;";
 		$result = $DB->query($query);
 		//echo "<br>Instancia: ".$query;
-		while ($data = $DB->fetch_assoc($result)) {			
+		while ($data = $DB->fetchassoc($result)) {			
 			$query = "INSERT INTO glpi_plugin_procedimientos_procedimientos_tickets 
 					 (plugin_procedimientos_procedimientos_id, tickets_id, line, itemtype, items_id, state)
 					  VALUES (".$procedimientos_id.",".$tickets_id.",".$data['line'].",'".$data['itemtype']."',".$data['items_id'].",0)";
@@ -422,7 +432,12 @@ function renumerar_procedimiento($procedimientos_id){
 	$lineas_nuevas = array();
 	// Renumera las lineas del procedimiento (1,2,3...)
 	if ($DB->numrows($result)){
-		while ($item = $DB->fetch_array($result)){
+
+	// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+	//while ($item = $DB->fetch_array($result)){
+		while ($item = $DB->fetchAssoc($result)){		
+	// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
+
 			//echo "<br>-------------------------<br>";
 			//echo "<br>Elemento a actualizar<br>";
 			//print_r($item);
@@ -517,7 +532,10 @@ $DB->query($update);
 	
 	if ($DB->numrows($result)){
 	 
-	 while ($lineas = $DB->fetch_array($result)){ // Para cada condici�n que se encuentra
+	// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+	//while ($lineas = $DB->fetch_array($result)){ // Para cada condición que se encuentra
+		while ($lineas = $DB->fetchAssoc($result)){ // Para cada condición que se encuentra	
+	// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
 
     $comment="<div class=\'condiciones\'>";
 	if ((isset($lineas["line_id_1"])) and ($lineas["line_id_1"]>0)){ 
@@ -581,7 +599,11 @@ $DB->query($update);
 			  and `glpi_plugin_procedimientos_procedimientos_items`.`plugin_procedimientos_procedimientos_id`='".$procedimientos_id."'";
 	$result = $DB->query($select);
 	if ($DB->numrows($result)){
-		while ($cond = $DB->fetch_array($result)){ // Para cada condici�n que se encuentra
+
+	// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+	//while ($cond = $DB->fetch_array($result)){ // Para cada condición que se encuentra
+		while ($cond = $DB->fetchAssoc($result)){ // Para cada condición que se encuentra
+	// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function			
 		
 			// Renumera way_yes
 			if (in_array($cond['way_yes'], $lineas_originales)) {
@@ -625,7 +647,12 @@ where a.plugin_procedimientos_procedimientos_id='".$procedimientos_id."'";
 	//echo "<br>Select salto:".$select."<br>";
 	$result = $DB->query($select);
 	if ($DB->numrows($result)){
-		while ($salto = $DB->fetch_array($result)){ // Para cada salto que se encuentra
+
+	// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+	//while ($salto = $DB->fetch_array($result)){ // Para cada salto que se encuentra
+		while ($salto = $DB->fetchAssoc($result)){ // Para cada salto que se encuentra
+	// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function
+		
 			//echo "<br>Datos del salto: ";
 			//print_r($salto);
 			// Renumera goto
@@ -670,7 +697,12 @@ function get_procedimiento_principal($tickets_id){
 								where `tickets_id`='".$tickets_id."' and `itemtype`='PluginProcedimientosProcedimiento')";
 	
 	$result_procedimiento = $DB->query($select_procedimiento);
-	$data = $DB->fetch_array($result_procedimiento);
+
+	// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+	//$data = $DB->fetch_array($result_procedimiento);
+		$data = $DB->fetchAssoc($result_procedimiento);		
+	// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function
+
 	return ($data['plugin_procedimientos_procedimientos_id']);
 								
 }
@@ -687,8 +719,11 @@ function procedimiento_finalizado($tickets_id, $procedimientos_id){
 							and `state`=1;";
 							
 	$result_fin = $DB->query($select_fin);
-	$data = $DB->fetch_array($result_fin);
-	
+// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+//$data = $DB->fetch_array($result_fin);
+	$data = $DB->fetchAssoc($result_fin);	
+// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
+
 	if (isset($data['id'])){
 		return true;
 	} else {
@@ -721,8 +756,12 @@ function ejecutar_Procedimiento($tickets_id) {
 		// Ticket con procedimiento instanciado.
 		if ($number_items > 0) {
 			$continua = true;
-			
-			while (($item = $DB->fetch_array($result_items)) && ($continua == true)) {
+
+	// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+		//while (($item = $DB->fetch_array($result_items)) && ($continua == true)) {
+			while (($item = $DB->fetchAssoc($result_items)) && ($continua == true)) {			
+	// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
+
 				$id_registro = $item['id'];
 				$procedimientos_id = $item['plugin_procedimientos_procedimientos_id'];
 				$line = $item['line'];
@@ -753,7 +792,12 @@ function ejecutar_Procedimiento($tickets_id) {
 					} else if ($itemtype == 'PluginProcedimientosAccion'){ 
 						$select_accion = "SELECT *  FROM glpi_plugin_procedimientos_accions WHERE ID = ".$items_id.";";
 						$result_accion = $DB->query($select_accion);
-						$accion = $DB->fetch_array($result_accion);
+
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+					//$accion = $DB->fetch_array($result_accion);
+						$accion = $DB->fetchAssoc($result_accion);								
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function							
+
 						if (isset($accion)) {
 							$nombre = $accion['name'];
 							$descripcion = $accion['comment'];
@@ -769,7 +813,11 @@ function ejecutar_Procedimiento($tickets_id) {
 											where `glpi_plugin_procedimientos_accions`.id = ".$items_id.";";
 																			
 								$result_tarea = $DB->query($select_tarea);
-								$accion_tarea = $DB->fetch_array($result_tarea);					
+							// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+							//$accion_tarea = $DB->fetch_array($result_tarea);		
+								$accion_tarea = $DB->fetchAssoc($result_tarea);																	
+							// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function									
+											
 					
 								$tarea = new TicketTask();
 								
@@ -838,7 +886,7 @@ function ejecutar_Procedimiento($tickets_id) {
 						 
 						 if ($number) {
 							  
-							     while ($data = $DB->fetch_assoc($result)) {
+							     while ($data = $DB->fetchassoc($result)) {
 
 // [INICIO] jmz18g 30/05/2019 CONTROLA SI LA RELACI�N TICKET Vs DOCUMENTO EXISTE
 			
@@ -880,7 +928,11 @@ if (count($rel_document) != 1) {
 									 inner join `glpi_plugin_procedimientos_escalados` on (`glpi_plugin_procedimientos_escalados`.plugin_procedimientos_accions_id = `glpi_plugin_procedimientos_accions`.id )
 									 where `glpi_plugin_procedimientos_accions`.id = ".$items_id.";";							
 								$result_escalado = $DB->query($select_escalado);
-								$accion_escalado = $DB->fetch_array($result_escalado);												
+
+							// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+							//$accion_escalado = $DB->fetch_array($result_escalado);
+								$accion_escalado = $DB->fetchAssoc($result_escalado);																										
+							// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function													
 
 								$ticket = new Ticket;
 								$grupo =  new Group_Ticket();
@@ -1048,7 +1100,11 @@ if (count($rel_document) != 1) {
 									 inner join `glpi_plugin_procedimientos_updatetickets` on (`glpi_plugin_procedimientos_updatetickets`.plugin_procedimientos_accions_id = `glpi_plugin_procedimientos_accions`.id )
 									 where `glpi_plugin_procedimientos_accions`.id = ".$items_id.";";							
 								$result_modify = $DB->query($select_modify);
-								$accion_modify = $DB->fetch_array($result_modify);
+
+							// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+							//$accion_modify = $DB->fetch_array($result_modify);
+								$accion_modify = $DB->fetchAssoc($result_modify);																																	
+							// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function									
 							
 								$ticket = new Ticket();
 								$ticket-> getFromDB($tickets_id);
@@ -1161,8 +1217,12 @@ if (count($rel_document) != 1) {
 									 where `glpi_plugin_procedimientos_accions`.id = ".$items_id.";";
 									 
 								$result_followup = $DB->query($select_followup);
-								$accion_followup = $DB->fetch_array($result_followup);												
-	       							
+
+							// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+							//$accion_followup = $DB->fetch_array($result_followup);
+								$accion_followup = $DB->fetchAssoc($result_followup);																																									
+							// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
+																															
 								$fup = new ITILFollowup();
 								$input = array();
 								$input['items_id'] = $tickets_id;
@@ -1213,7 +1273,7 @@ array(7) { ["tickets_id"]=> string(2) "28" ["users_id"]=> string(1) "7"
 						 
 						 if ($number) {
 							  
-							     while ($data = $DB->fetch_assoc($result)) {
+							     while ($data = $DB->fetchassoc($result)) {
 
 // [INICIO] jmz18g 30/05/2019 CONTROLA SI LA RELACI�N TICKET Vs DOCUMENTO EXISTE
 
@@ -1257,8 +1317,11 @@ if (count($rel_document) != 1) {
 									 where `glpi_plugin_procedimientos_accions`.id = ".$items_id.";";
 
 								$result_validation = $DB->query($select_validation);											
-	       						
-								while ($row_val = $DB->fetch_array($result_validation)) {							
+
+							// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+							//while ($row_val = $DB->fetch_array($result_validation)) {	
+								while ($row_val = $DB->fetchAssoc($result_validation)) {																																															
+							// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function																							
 									$val = new TicketValidation();
 									$input = array();
 									$input['tickets_id'] = $tickets_id;
@@ -1280,7 +1343,11 @@ if (count($rel_document) != 1) {
 													}	
 
 										if ($existe==1){
-										$id_validator = $DB->fetch_array($validation);
+
+									// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+									//$id_validator = $DB->fetch_array($validation);
+										$id_validator = $DB->fetchAssoc($validation);																																																								
+									// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function										
 										
 										if (isset($id_validator["id"])) { 
 										
@@ -1404,7 +1471,12 @@ if (count($rel_document) != 1) {
 					else if ($itemtype == 'PluginProcedimientosSalto'){
 						$select_salto = "SELECT *  FROM glpi_plugin_procedimientos_saltos WHERE ID = ".$items_id.";";
 						$result_salto = $DB->query($select_salto);
-						$salto = $DB->fetch_array($result_salto);
+
+						// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+						//$salto = $DB->fetch_array($result_salto);
+							$salto = $DB->fetchAssoc($result_salto);																																																												
+						// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function							
+
 						if (isset($salto['goto'])) {											
 							if ($salto['goto'] < $line){
 								/*$update = "UPDATE `glpi_plugin_procedimientos_procedimientos_tickets` SET `state`='0' WHERE `id`='".$id_registro."';";
@@ -1430,7 +1502,12 @@ if (count($rel_document) != 1) {
 							//echo "<br>Select_proc:".$select_proc;
 						}
 						$result_proc = $DB->query($select_proc);
-						$proc = $DB->fetch_array($result_proc);
+
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+					//$proc = $DB->fetch_array($result_proc);
+						$proc = $DB->fetchAssoc($result_proc);																																																																		
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
+
 						if (isset($proc)) {
 							if ($_SESSION['glpi_use_mode'] == 2) {	
 							//	echo "<br>procedimiento:";
@@ -1473,7 +1550,12 @@ if (count($rel_document) != 1) {
 						//echo "<BR>Enlaces<BR>";
 						$select_link = "SELECT *  FROM glpi_plugin_procedimientos_links WHERE ID = ".$items_id.";";
 						$result_link = $DB->query($select_link);
-						$link = $DB->fetch_array($result_link);
+
+					// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+					//$link = $DB->fetch_array($result_link);
+						$link = $DB->fetchAssoc($result_link);																																																																			
+					// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function							
+						
 						if (isset($link)) {
 							$nombre = $link['name'];
 							$url = $link['comment'];					
@@ -1500,7 +1582,12 @@ function reset_camino_salto_adelante($procedimientos_id, $tickets_id, $way, $lin
 				   and `tickets_id`= '".$tickets_id."'
 				   and line =".$linea.";";  	
 	$results_ID1 = $DB->query($select_ID1 );	
-	$elemento1 = $DB->fetch_array($results_ID1);
+
+// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+//$elemento1 = $DB->fetch_array($results_ID1);
+	$elemento1 = $DB->fetchAssoc($results_ID1);																																																							
+// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	
+
 	$id1 = $elemento1['id'];
 	
 	//echo $select_ID1."<br><br><br>";
@@ -1510,8 +1597,12 @@ function reset_camino_salto_adelante($procedimientos_id, $tickets_id, $way, $lin
 				   WHERE `plugin_procedimientos_procedimientos_id`='".$procedimientos_id."'
 				   and `tickets_id`= '".$tickets_id."'
 				   and line =".$way.";";   	
-	$results_ID2 = $DB->query($select_ID2 );	
-	$elemento2 = $DB->fetch_array($results_ID2);
+	$results_ID2 = $DB->query($select_ID2 );
+
+// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+//$elemento2 = $DB->fetch_array($results_ID2);
+	$elemento2 = $DB->fetchAssoc($results_ID2);																																																																		
+// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function			
 	$id2 = $elemento2['id'];
 	
 //	echo $select_ID2."<br><br><br>";
@@ -1535,7 +1626,11 @@ function reset_camino_salto_atras($procedimientos_id, $tickets_id, $way, $linea)
 				   and `tickets_id`= '".$tickets_id."'
 				   and line =".$way.";";   	
 	$results_ID2 = $DB->query($select_ID2 );	
-	$elemento2 = $DB->fetch_array($results_ID2);
+
+// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+//$elemento2 = $DB->fetch_array($results_ID2);
+	$elemento2 = $DB->fetchAssoc($results_ID2);																																																																
+// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function		
 	$id2 = $elemento2['id'];
 	
 	$update_estado = "UPDATE `glpi_plugin_procedimientos_procedimientos_tickets` SET `state`='0'

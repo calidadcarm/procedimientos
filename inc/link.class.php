@@ -69,6 +69,10 @@ class PluginProcedimientosLink extends CommonDBTM {
 		return _n('Enlaces','enlaces',$nb, 'links');
    }    
    
+   static function getIcon() {
+		return "fas fa-link";
+	 }
+
    // Si borro un enlace
    function cleanDBonPurge() {
 	   global $DB;

@@ -70,7 +70,7 @@ foreach($items as $item) {
     if ($result = $DB->query($query)) {
          if ($DB->numrows($result)) {      
 		
-	while ($line = $DB->fetch_assoc($result)) {   			
+	while ($line = $DB->fetchassoc($result)) {   			
 
 	$line_id_1=0;
 	$line_id_2=0;
@@ -100,7 +100,7 @@ foreach($items as $item) {
 		
 	$result_linea=$DB->query($query_linea);	
 	
-	$lineas = $DB->fetch_assoc($result_linea);	
+	$lineas = $DB->fetchassoc($result_linea);	
 	
 	$comment="<div class=\'condiciones\'>";
 	

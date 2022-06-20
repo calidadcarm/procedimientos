@@ -37,7 +37,7 @@ if (isset($_GET["boton"])) {
 				  and `plugin_procedimientos_procedimientos_id`=".$procedimientos_id;
  			  
 	$result = $DB->query($query);
-	$id_intercambio = $DB->fetch_assoc($result);		
+	$id_intercambio = $DB->fetchassoc($result);		
 	
 	if ($id_intercambio['id']!= NULL) PluginProcedimientosProcedimiento_Item::intercambia($id_origen,$linea_original,$id_intercambio['id'], $linea_intercambio);
 	
@@ -51,7 +51,7 @@ if (isset($_GET["boton"])) {
 	if ($DB->numrows($result_condiciones)){
 		//$lineas =  getLineasProcedimiento($procedimientos_id);
 		//print_r($lineas);
-		while ($cond = $DB->fetch_assoc($result_condiciones)) {
+		while ($cond = $DB->fetchassoc($result_condiciones)) {
 			if ($cond['way_yes'] == $linea_original){
 				$cond['way_yes'] = 99999;
 			}
@@ -95,7 +95,10 @@ if (isset($_GET["boton"])) {
 	//echo "<br>Select salto:".$select_saltos."<br>";
 	$result_saltos = $DB->query($select_saltos);
 	if ($DB->numrows($result_saltos)){
-		while ($salto = $DB->fetch_array($result_saltos)){ // Para cada salto que se encuentra
+	// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function
+	//while ($salto = $DB->fetch_array($result_saltos)){ // Para cada salto que se encuentra
+		while ($salto = $DB->fetchAssoc($result_saltos)){ // Para cada salto que se encuentra
+	// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function
 			//echo "<br>Datos del salto: ";
 			//	print_r($salto);
 			// Renumera goto
@@ -143,7 +146,7 @@ if (isset($_POST["add"])) {
       $query = "SELECT max(line) as linea FROM `glpi_plugin_procedimientos_procedimientos_items` 
 					where plugin_procedimientos_procedimientos_id=".$_POST["procedimientos_id"];
       $result = $DB->query($query);
-	  $data = $DB->fetch_assoc($result);
+	  $data = $DB->fetchassoc($result);
       $_POST["line"] = $data["linea"]+1;
 	               
       switch ($_POST["_type"]) {

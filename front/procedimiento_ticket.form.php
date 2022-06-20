@@ -72,7 +72,10 @@ if ((!empty($state) and (!empty($instancia)) and (!empty($campo_1)) and (!empty(
 
 	    $select_wayyes = "Select `plugin_procedimientos_procedimientos_id`,$campo_1, `$campo_2`, `name` from `glpi_plugin_procedimientos_condicions` where `id`='".$_POST['items_id']."';";
 	$result_wayyes = $DB->query($select_wayyes);
-	$condicion = $DB->fetch_array($result_wayyes);
+// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+//$condicion = $DB->fetch_array($result_wayyes);
+	$condicion = $DB->fetchAssoc($result_wayyes);
+// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function
 	if (isset($condicion[$campo_1])){
 		$update = "UPDATE `glpi_plugin_procedimientos_procedimientos_tickets` SET ".$state." ".$instancia." 
 				   WHERE `plugin_procedimientos_procedimientos_id`='".$condicion['plugin_procedimientos_procedimientos_id']."' and `tickets_id`='".$tickets_id."' and
@@ -107,7 +110,12 @@ if ((!empty($state) and (!empty($instancia)) and (!empty($campo_1)) and (!empty(
 if (isset($_POST["way_yes"])) { // Respuesta condición 'SI'
     $select_wayyes = "Select `plugin_procedimientos_procedimientos_id`,`way_yes`, `tag_0`, `name` from `glpi_plugin_procedimientos_condicions` where `id`='".$_POST['items_id']."';";
 	$result_wayyes = $DB->query($select_wayyes);
-	$condicion = $DB->fetch_array($result_wayyes);
+
+// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+//$condicion = $DB->fetch_array($result_wayyes);
+	$condicion = $DB->fetchAssoc($result_wayyes);
+// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function
+
 	if (isset($condicion['way_yes'])){
 		$update = "UPDATE `glpi_plugin_procedimientos_procedimientos_tickets` SET `state`='1', `instancia_id` = '0'
 				   WHERE `plugin_procedimientos_procedimientos_id`='".$condicion['plugin_procedimientos_procedimientos_id']."' and `tickets_id`='".$tickets_id."' and
@@ -139,7 +147,10 @@ if (isset($_POST["way_yes"])) { // Respuesta condición 'SI'
 } else if (isset($_POST["way_no"])) { // Respuesta condición 'NO'
     $select_wayno = "Select `plugin_procedimientos_procedimientos_id`,`way_no`, `tag_1`, `name` from `glpi_plugin_procedimientos_condicions` where `id`='".$_POST['items_id']."';";
 	$result_wayno = $DB->query($select_wayno);
-	$condicion = $DB->fetch_array($result_wayno);
+// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function		
+//$condicion = $DB->fetch_array($result_wayno);
+	$condicion = $DB->fetchAssoc($result_wayno);
+// [FINAL] [CRI] [JMZ18G] fetch_array deprecated function
 	if (isset($condicion['way_no'])){
 		$update = "UPDATE `glpi_plugin_procedimientos_procedimientos_tickets` SET `state`='1' , `instancia_id` = '1'
 				   WHERE `plugin_procedimientos_procedimientos_id`='".$condicion['plugin_procedimientos_procedimientos_id']."' and `tickets_id`='".$tickets_id."' and

@@ -614,7 +614,7 @@ class PluginProcedimientosProcedimiento_Form extends CommonDBRelation {
          $i = 0;
       
                if ($numrows>0) {
-                  while ($data = $DB->fetch_assoc($result_linked)) {
+                  while ($data = $DB->fetchassoc($result_linked)) {
                      Session::addToNavigateListItems(PluginProcedimientosProcedimiento_Form::class, $data['id']);
                      self::showShort(
                         $data['id'],
@@ -697,7 +697,7 @@ class PluginProcedimientosProcedimiento_Form extends CommonDBRelation {
 				 GROUP BY `glpi_plugin_formcreator_forms`.id ORDER BY `glpi_plugin_formcreator_forms`.name";
       if ($result_linked = $DB->query($query)) {
                if ($DB->numrows($result_linked)) {
-                  while ($data = $DB->fetch_assoc($result_linked)) {
+                  while ($data = $DB->fetchassoc($result_linked)) {
                      $linkname = $data["name"];
                      if ($_SESSION["glpiis_ids_visible"]
                          || empty($data["name"])) {
@@ -987,7 +987,7 @@ class PluginProcedimientosProcedimiento_Form extends CommonDBRelation {
                    FROM `glpi_plugin_procedimientos_procedimientos_items`
                    WHERE  plugin_procedimientos_procedimientos_id='".$procedures_id."'";
          $result = $DB->query($query);
-		 $items_originales = $DB->fetch_assoc($result);
+		 $items_originales = $DB->fetchassoc($result);
 		 
       
       } else {

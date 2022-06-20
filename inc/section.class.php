@@ -69,7 +69,12 @@ class PluginProcedimientosSection extends CommonDBChild
                  FROM `$table`
                  WHERE `plugin_formcreator_forms_id` = {$input['plugin_formcreator_forms_id']}";
       $result = $DB->query($query);
-      $line   = $DB->fetch_array($result);
+
+	// [INICIO] [CRI] [JMZ18G] fetch_array deprecated function	
+	// $line   = $DB->fetch_array($result);
+      $line   = $DB->fetchAssoc($result);      
+   // [FINAL] [CRI] [JMZ18G] fetch_array deprecated function	      
+
       $input['order'] = $line['order'] + 1;
 
       return $input;
